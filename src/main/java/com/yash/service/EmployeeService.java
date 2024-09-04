@@ -9,4 +9,6 @@ import java.util.List;
 public interface EmployeeService {
 	
 	public List<Employee> getAllEmployees();
+
+	public List<Employee> getEmployees(String name,int id,String department,double minSalary,double maxSalary);
 }

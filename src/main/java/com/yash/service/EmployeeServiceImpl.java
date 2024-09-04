@@ -21,4 +21,11 @@ public class EmployeeServiceImpl implements EmployeeService{
 	public List<Employee> getAllEmployees(){
 		return employeeRepository.getAllEmployees();
 	}
+
+	@Override
+	public List<Employee> getEmployees(String name,int id,String department,double minSalary,double maxSalary) {
+		return employeeRepository.getEmployees(name,id,department,minSalary,maxSalary);
+	}
+    
+    
 }
