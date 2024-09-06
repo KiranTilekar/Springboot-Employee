@@ -4,17 +4,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+
 import com.yash.model.Employee;
+import com.yash.model.EmployeeForm;
 import com.yash.service.EmployeeService;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
-//@RequestMapping("/")
+@CrossOrigin(origins = "*")
+@RequestMapping("/employee")
 public class EmployeeController {
 
 //	@CrossOrigin(origins = "http://localhost:4200")
@@ -35,28 +39,33 @@ public class EmployeeController {
         this.employeeService = employeeService;
     }
     
-    @GetMapping("/")
+    @GetMapping("/search")
     public ResponseEntity<List<Employee>> getAllEmployees() {
     	System.out.println("lable1");
         List<Employee> employees = employeeService.getAllEmployees();
-        System.out.println(employees);
         return ResponseEntity.ok(employees);
     }
     
-    @GetMapping("/search")
-    public ResponseEntity<List<Employee>> getEmployees(
-            @RequestParam(required = false) String name,
-            @RequestParam(required = false) Integer id,
-            @RequestParam(required = false) String department,
-            @RequestParam(required = false) Double minSalary,
-            @RequestParam(required = false) Double maxSalary) {
+    @PostMapping("/search")
+    public List<Employee> getEmployees(@RequestBody EmployeeForm employeeForm) {
     	
-    	System.out.println("inside /search get");
-    	System.out.println(id);
-        List<Employee> employees = employeeService.getEmployees(name, id, department, minSalary, maxSalary);
-        
-        return ResponseEntity.ok(employees);
+//    	System.out.println("name: " + name); 
+//    	System.out.println("id: " + id);
+//    	System.out.println("minSalary " + minSalary);
+//    	
+//    	System.out.println("inside /search get");
+//    	System.out.println(id);
+
+    	System.out.println(employeeForm);
+    	
+    	List<Employee> emps = employeeService.getEmployees(employeeForm.getName(), employeeForm.getId(), employeeForm.getDepartment(), 0, 30000);
+    	System.out.println("working!!!!");
+    	for(Employee e: emps) {
+    		System.out.println("0=> " + e);
+    	}
+    	return emps;
     }
+    
     
     @GetMapping("/users/{id}")
     public String getUser(@RequestParam Long id) {

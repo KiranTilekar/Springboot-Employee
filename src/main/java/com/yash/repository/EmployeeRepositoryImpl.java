@@ -1,5 +1,6 @@
 package com.yash.repository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,40 +24,37 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
     }
 
 	@Override
-	public List<Employee> getEmployees(
-            @RequestParam(required = false) String name,
-            @RequestParam(required = false) int id,
-            @RequestParam(required = false) String department,
-            @RequestParam(required = false) Double minSalary,
-            @RequestParam(required = false) Double maxSalary) {
+	public List<Employee> getEmployees(String name, int id, String department, Double minSalary, Double maxSalary) {
         
-        List<Employee> employees = getAllEmployees();
+        List<Employee> allEmployees = getAllEmployees();
+        List<Employee> filteredEmployees = new ArrayList(); 
         
-        if (name != null && !name.isEmpty()) {
-            employees = employees.stream()
-                .filter(e -> e.getName().contains(name))
-                .collect(Collectors.toList());
+        System.out.println("id: " + id);
+        System.out.println("name: " + name);
+        System.out.println("dept: " + department);
+        System.out.println("mins: " + minSalary);
+        System.out.println("maxs: " + maxSalary);
+        
+        
+        
+        for(Employee e: allEmployees) {
+        	
+        	System.out.println("Name@@: " + e.getName());
+        	System.out.println("Id@@: " + e.getId());
+        	
+        	if(e.getId() == id && e.getName().equals(name)) {
+        		System.out.println("match found!!!");
+        		filteredEmployees.add(e);
+        	}
         }
         
-        if (department != null && !department.isEmpty()) {
-            employees = employees.stream()
-                .filter(e -> e.getDepartment().contains(department))
-                .collect(Collectors.toList());
+        for(Employee e: filteredEmployees) {
+        	System.out.println("yesss@@: " + e.getName());
+        	System.out.println("yesss@@: " + e.getId());
         }
+
         
-        if (minSalary != null) {
-            employees = employees.stream()
-                .filter(e -> e.getSalary().compareTo(minSalary) >= 0)
-                .collect(Collectors.toList());
-        }
-        
-        if (maxSalary != null) {
-            employees = employees.stream()
-                .filter(e -> e.getSalary().compareTo(maxSalary) <= 0)
-                .collect(Collectors.toList());
-        }
-        
-        return employees;
+        return filteredEmployees;
     }
 
     
